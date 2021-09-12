@@ -92,23 +92,23 @@ contract SimpleBank {
     /// @param withdrawAmount amount you want to withdraw
     /// @return The balance remaining for the user
     function withdraw(uint withdrawAmount) public returns (uint256) {
-		// If the sender's balance is at least the amount they want to withdraw,
-		// Subtract the amount from the sender's balance, and try to send that amount of ether
-		// to the user attempting to withdraw. 
-		// return the user's balance.
+        // If the sender's balance is at least the amount they want to withdraw,
+        // Subtract the amount from the sender's balance, and try to send that amount of ether
+        // to the user attempting to withdraw. 
+        // return the user's balance.
 
-		// 1. Use a require expression to guard/ensure sender has enough funds
-		address caller = msg.sender;
-		require(_balances[caller] - withdrawAmount >= 0, "not enough funds");
+        // 1. Use a require expression to guard/ensure sender has enough funds
+        address caller = msg.sender;
+        require(_balances[caller] - withdrawAmount >= 0, "not enough funds");
 
-		// 2. Transfer Eth to the sender and decrement the withdrawal amount from sender's balance
-		(bool sent,) = caller.call{ value: withdrawAmount }("");
-		require(sent, "Failed to send withdraw ether");
+        // 2. Transfer Eth to the sender and decrement the withdrawal amount from sender's balance
+        (bool sent,) = caller.call{ value: withdrawAmount }("");
+        require(sent, "Failed to send withdraw ether");
 
-		// 3. Emit the appropriate event for this message
-		_balances[caller] -= withdrawAmount;
-		uint256 newBalance = _balances[caller];
-		emit LogWithdrawal(caller, withdrawAmount, newBalance);
-		return newBalance;
+        // 3. Emit the appropriate event for this message
+        _balances[caller] -= withdrawAmount;
+        uint256 newBalance = _balances[caller];
+        emit LogWithdrawal(caller, withdrawAmount, newBalance);
+        return newBalance;
     }
 }
