@@ -21,7 +21,7 @@ contract SimpleBank {
     // Fill in the visibility keyword. 
     // Hint: We want to protect our users balance from other contracts
     mapping(address => uint) private _balances;
-    
+
     // Fill in the visibility keyword
     // Hint: We want to create a getter function and allow contracts to be able
     //       to see if a user is enrolled.
@@ -30,14 +30,14 @@ contract SimpleBank {
     // Let's make sure everyone knows who owns the bank, yes, fill in the
     // appropriate visilibility keyword
     address public owner;
-    
-	constructor() {
-		owner = msg.sender;
-	}
 
-	function enrolled(address account) public view returns (bool) {
-		return _enrolled[account];
-	}
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function enrolled(address account) public view returns (bool) {
+        return _enrolled[account];
+    }
 
     // Fallback function - Called if other functions don't match call or
     // sent ether without data
@@ -48,43 +48,43 @@ contract SimpleBank {
         revert();
     }
 
-	receive() external payable {
-		revert();
-	}
+    receive() external payable {
+        revert();
+    }
 
     /// @notice Get balance
     /// @return The balance of the user
     function getBalance() public view returns (uint256) {
-		// 1. A SPECIAL KEYWORD prevents function from editing state variables;
-		//    allows function to run locally/off blockchain
-		// 2. Get the balance of the sender of this transaction
-		return _balances[msg.sender];
+        // 1. A SPECIAL KEYWORD prevents function from editing state variables;
+        //    allows function to run locally/off blockchain
+        // 2. Get the balance of the sender of this transaction
+        return _balances[msg.sender];
     }
 
     /// @notice Enroll a customer with the bank
     /// @return The users enrolled status
     // Emit the appropriate event
     function enroll() public returns (bool) {
-		require(!_enrolled[msg.sender], "SimpleBank: caller already enrolled");
-		// 1. enroll of the sender of this transaction
-		_enrolled[msg.sender] = true;
-		emit LogEnrolled(msg.sender);
-		return true;
+        require(!_enrolled[msg.sender], "SimpleBank: caller already enrolled");
+        // 1. enroll of the sender of this transaction
+        _enrolled[msg.sender] = true;
+        emit LogEnrolled(msg.sender);
+        return true;
     }
 
     /// @notice Deposit ether into bank
     /// @return The balance of the user after the deposit is made
     function deposit() public payable returns (uint256) {
-		// 1. Add the appropriate keyword so that this function can receive ether
-		// 2. Users should be enrolled before they can make deposits
-		address caller = msg.sender;
-		require(_enrolled[caller], "caller must be enrolled");
-		// 3. Add the amount to the user's balance. Hint: the amount can be accessed from of the global variable `msg`
-		_balances[caller] += msg.value;
-		// 4. Emit the appropriate event associated with this function
-		emit LogDepositMade(caller, msg.value);
-		// 5. return the balance of sndr of this transaction
-		return _balances[caller];
+        // 1. Add the appropriate keyword so that this function can receive ether
+        // 2. Users should be enrolled before they can make deposits
+        address caller = msg.sender;
+        require(_enrolled[caller], "caller must be enrolled");
+        // 3. Add the amount to the user's balance. Hint: the amount can be accessed from of the global variable `msg`
+        _balances[caller] += msg.value;
+        // 4. Emit the appropriate event associated with this function
+        emit LogDepositMade(caller, msg.value);
+        // 5. return the balance of sndr of this transaction
+        return _balances[caller];
     }
 
     /// @notice Withdraw ether from bank
@@ -98,15 +98,15 @@ contract SimpleBank {
 		// return the user's balance.
 
 		// 1. Use a require expression to guard/ensure sender has enough funds
-        address caller = msg.sender;
+		address caller = msg.sender;
 		require(_balances[caller] - withdrawAmount >= 0, "not enough funds");
 
 		// 2. Transfer Eth to the sender and decrement the withdrawal amount from sender's balance
-        (bool sent,) = caller.call{ value: withdrawAmount }("");
-        require(sent, "Failed to send withdraw ether");
+		(bool sent,) = caller.call{ value: withdrawAmount }("");
+		require(sent, "Failed to send withdraw ether");
 
 		// 3. Emit the appropriate event for this message
-        _balances[caller] -= withdrawAmount;
+		_balances[caller] -= withdrawAmount;
 		uint256 newBalance = _balances[caller];
 		emit LogWithdrawal(caller, withdrawAmount, newBalance);
 		return newBalance;
