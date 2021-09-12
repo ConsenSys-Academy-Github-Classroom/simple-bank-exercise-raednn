@@ -1,0 +1,15 @@
+{
+  "name": "simple-bank-exercise-raednn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ConsenSys-Academy-Github-Classroom/simple-bank-exercise-raednn",
+  "author": "raednn <raednn@protonmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "compile": "truffle compile",
+    "test": "truffle test"
+  },
+  "dependencies": {
+    "truffle": "^5.4.10"
+  }
+}
